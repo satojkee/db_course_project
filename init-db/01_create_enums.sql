@@ -1,0 +1,2 @@
+CREATE TYPE call_status AS ENUM ('IN_PROGRESS', 'FINISHED');
+CREATE TYPE payment_status AS ENUM ('PENDING', 'SUCCEEDED');

@@ -1,0 +1,9 @@
+sqlalchemy==2.0.44
+asyncpg==0.30.0
+pydantic==2.12.4
+pydantic-settings==2.12.0
+loguru==0.7.3
+uvicorn==0.38.0
+fastapi==0.121.2
+fastcrud==0.19.2
+redis==7.1.0

@@ -1,0 +1,89 @@
+enum call_status {
+  IN_PROGRESS
+  FINISHED
+}
+
+enum payment_status {
+  PENDING
+  SUCCEEDED
+}
+
+Table customers {
+  id integer [primary key, increment]
+  category_id integer [not null]
+  city_id integer [not null]
+  fullname varchar [not null]
+  passport varchar [unique, not null]
+}
+
+Table phone_numbers {
+  id integer [primary key, increment]
+  customer_id integer [not null]
+  number varchar [unique, not null]
+}
+
+Table categories {
+  id integer [primary key, increment]
+  name varchar [not null]
+  discount_mtp float [not null, default: 1]
+  rate_id integer [not null]
+}
+
+Table rates {
+  id integer [primary key, increment]
+  cost float [not null]
+}
+
+Table cities {
+  id integer [primary key, increment]
+  country_id integer [not null]
+  name varchar
+  zip_code varchar
+}
+
+Table countries {
+  id integer [primary key, increment]
+  name varchar [not null]
+  minute_cost float [not null]
+}
+
+Table calls {
+  id integer [primary key, increment]
+  from_customer_id integer [not null]
+  to_customer_id integer [not null]
+  started_at timestamp [not null, default: `now()`]
+  finished_at timestamp
+  duration float
+  charge float
+  status call_status
+}
+
+Table payments {
+  id integer [primary key, increment]
+  customer_id integer [not null]
+  amount float [not null]
+  status payment_status
+  created_at timestamp [not null, default: `now()`]
+}
+
+Table admins {
+  id integer [primary key, increment]
+  username varchar
+  password varchar
+  created_at timestamp [not null, default: `now()`]
+}
+Ref: customers.id < phone_numbers.customer_id // one to many
+
+Ref: customers.id < calls.from_customer_id // one to many
+
+Ref: customers.id < calls.to_customer_id // one to many
+
+Ref: customers.id < payments.customer_id // one to many
+
+Ref: categories.id < customers.category_id // one to many
+
+Ref: rates.id < categories.rate_id // one to many
+
+Ref: countries.id < cities.country_id // one to many
+
+Ref: cities.id < customers.city_id // one to many
