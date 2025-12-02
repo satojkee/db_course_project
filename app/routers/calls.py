@@ -14,7 +14,7 @@ from sqlalchemy.exc import NoResultFound
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.types import CallStatus
-from app.dependencies import get_session
+from app.dependencies import get_session, check_auth_token
 from app.schemas import CallCreateSchema, CallReadSchema, CallUpdateSchema
 from app.orm.models import Call, PhoneNumber
 
@@ -152,3 +152,26 @@ async def get_call(
         )
 
     return call
+
+
+@call_router.get(
+    '',
+    response_model=dict[str, list[CallReadSchema] | int],
+    dependencies=[Depends(check_auth_token)]
+)
+async def get_calls(
+    session: Annotated[AsyncSession, Depends(get_session)]
+) -> dict[str, list[CallReadSchema] | int]:
+    """Returns all calls present in the database.
+
+    :param session: SQLAlchemy AsyncSession instance.
+    :type session: AsyncSession
+    :return: All cities and their count.
+    :rtype: dict[str, list[CallReadSchema] | int]
+    """
+    return await call_repo.get_multi(
+        session,
+        limit=None,
+        return_as_model=True,
+        schema_to_select=CallReadSchema
+    )
