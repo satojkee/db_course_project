@@ -4,16 +4,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from app.orm import create_tables
-from app.routers import (
-    category_router,
-    rate_router,
-    city_router,
-    country_router,
-    customer_router,
-    phone_router,
-    call_router,
-    payment_router, auth_router
-)
+from app.routers import v1_router
 
 __all__ = ('app',)
 
@@ -41,12 +32,4 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-app.include_router(auth_router)
-app.include_router(category_router)
-app.include_router(rate_router)
-app.include_router(city_router)
-app.include_router(country_router)
-app.include_router(customer_router)
-app.include_router(phone_router)
-app.include_router(call_router)
-app.include_router(payment_router)
+app.include_router(v1_router)
