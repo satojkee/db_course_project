@@ -144,7 +144,7 @@ class PaymentReadSchema(_BaseSchema, _IDMixin):
     customer_id: int
     status: PaymentStatusesLiteral
     created_at: datetime
-    updated_at: datetime
+    updated_at: datetime | None = None
 
 
 class CallReadSchema(CallCreateSchema, _IDMixin):
